@@ -1,0 +1,20 @@
+<Addin id="rstcompletion" namespace="MonoDevelop" 
+	name="RST code completion"
+	author="Konrad Kruczyński"
+	description="RST code completion plugin for MonoDevelop"
+	version="0.1"
+>
+
+<Dependencies>
+	<Addin id="Ide" version="3.0" />
+</Dependencies>
+
+<Runtime>
+	<Import assembly="RstCompletion.dll" />
+</Runtime>
+
+<Extension path = "/MonoDevelop/Ide/TextEditorExtensions">
+	<Class class="MonoDevelop.Rst.RstCompletionExtension" />
+</Extension>
+
+</Addin>
