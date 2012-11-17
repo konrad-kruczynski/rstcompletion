@@ -22,28 +22,12 @@
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */ 
-using System;
-using MonoDevelop.Ide.Gui.Content;
-using MonoDevelop.Ide.Gui;
-using System.IO;
-using MonoDevelop.Ide.CodeCompletion;
-
-namespace MonoDevelop.Rst
+ */ namespace MonoDevelop.Rst
 {
-	public class RstCompletionExtension : CompletionTextEditorExtension
+	public enum Mode
 	{
-		public override bool ExtendsEditor(Document doc, IEditableTextBuffer editor)
-		{
-			return doc.IsFile && Path.GetExtension(doc.FileName).ToLower() == ".rst";
-		}
-
-		public override ICompletionDataList HandleCodeCompletion(CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
-		{
-			return base.HandleCodeCompletion(completionContext, completionChar, ref triggerWordLength);
-		}
-
-		private Mode currentMode;
+		Usual,
+		InBullet
 	}
 }
 
