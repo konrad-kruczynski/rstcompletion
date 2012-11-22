@@ -24,6 +24,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */ 
 using System;
+using System.Linq;
 using MonoDevelop.Ide.Gui.Content;
 using MonoDevelop.Ide.Gui;
 using System.IO;
@@ -33,17 +34,33 @@ namespace MonoDevelop.Rst
 {
 	public class RstCompletionExtension : CompletionTextEditorExtension
 	{
+		public override void Initialize()
+		{
+			sectionCompletion = new SectionCompletion(Document);
+		}
+
 		public override bool ExtendsEditor(Document doc, IEditableTextBuffer editor)
 		{
 			return doc.IsFile && Path.GetExtension(doc.FileName).ToLower() == ".rst";
 		}
 
-		public override ICompletionDataList HandleCodeCompletion(CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
+		public override void TextChanged(int startIndex, int endIndex)
 		{
-			return base.HandleCodeCompletion(completionContext, completionChar, ref triggerWordLength);
+			sectionCompletion.TextChanged(startIndex, endIndex);
+			base.TextChanged(startIndex, endIndex);
 		}
 
-		private Mode currentMode;
+		public override ICompletionDataList HandleCodeCompletion(CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
+		{
+			var completionDataList = new CompletionDataList();
+
+			if(completionDataList.Count == 0)
+			{
+				return null;
+			}
+		}
+
+		private SectionCompletion sectionCompletion;
 	}
 }
 
