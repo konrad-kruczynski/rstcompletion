@@ -4,6 +4,7 @@ using MonoDevelop.Ide.Gui;
 using System.Collections.Generic;
 using System.Diagnostics;
 using MonoDevelop.Ide.CodeCompletion;
+using System.IO;
 
 namespace MonoDevelop.Rst
 {
@@ -24,7 +25,22 @@ namespace MonoDevelop.Rst
 				return;
 			}
 
-			var sectionChar = SectionChars[completionChar];
+			var lineNumber = completionContext.TriggerLine;
+			if(lineNumber == 0)
+			{
+				return;
+			}
+			var lineAbove = document.Editor.GetLineText(lineNumber - 1);
+			if(string.IsNullOrEmpty(lineAbove))
+			{
+				return;
+			}
+			var completionData = new CompletionData("fake") /// TODO
+			{
+				CompletionText = new string(completionChar, lineAbove.Length - completionContext.TriggerLineOffset),
+				DisplayText = "Section" // TODO: title, subtitle etc
+			};
+			completionList.Add(completionData);
 
 		}
 
@@ -93,7 +109,7 @@ namespace MonoDevelop.Rst
 				}
 				foreach(var sectionChar in SectionChars)
 				{
-					if(lineBelow == new string(sectionChar, lineLength))
+					if(lineBelow == new string(sectionChar, lineLength) && !linesWithSections.ContainsKey(i))
 					{
 						linesWithSections.Add(i, sectionChar);
 						i++;

@@ -37,6 +37,7 @@ namespace MonoDevelop.Rst
 		public override void Initialize()
 		{
 			sectionCompletion = new SectionCompletion(Document);
+			base.Initialize();
 		}
 
 		public override bool ExtendsEditor(Document doc, IEditableTextBuffer editor)
@@ -50,14 +51,26 @@ namespace MonoDevelop.Rst
 			base.TextChanged(startIndex, endIndex);
 		}
 
+		public override ICompletionDataList CodeCompletionCommand(CodeCompletionContext completionContext)
+		{
+			var a = 0;
+			return HandleCodeCompletion(completionContext, '-', ref a);
+		}
+
 		public override ICompletionDataList HandleCodeCompletion(CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
 		{
 			var completionDataList = new CompletionDataList();
-
+			sectionCompletion.FillCompletionList(completionDataList, completionContext, completionChar, ref triggerWordLength);
 			if(completionDataList.Count == 0)
 			{
 				return null;
 			}
+			return completionDataList;
+		}
+
+		public override bool CanRunCompletionCommand()
+		{
+			return true;
 		}
 
 		private SectionCompletion sectionCompletion;
