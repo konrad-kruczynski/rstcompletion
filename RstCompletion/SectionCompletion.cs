@@ -35,10 +35,14 @@ namespace MonoDevelop.Rst
 			{
 				return;
 			}
-			var completionData = new CompletionData("fake") /// TODO
+			var charsToCompleteNo = lineAbove.Length - completionContext.TriggerLineOffset;
+			if(charsToCompleteNo <= 0)
 			{
-				CompletionText = new string(completionChar, lineAbove.Length - completionContext.TriggerLineOffset),
-				DisplayText = "Section" // TODO: title, subtitle etc
+				return;
+			}
+			var completionData = new CompletionData(new string(completionChar, charsToCompleteNo))
+			{
+				Description = string.Format("Section mark ({0} chars)", charsToCompleteNo)
 			};
 			completionList.Add(completionData);
 

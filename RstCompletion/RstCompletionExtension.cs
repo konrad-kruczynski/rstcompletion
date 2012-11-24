@@ -51,12 +51,6 @@ namespace MonoDevelop.Rst
 			base.TextChanged(startIndex, endIndex);
 		}
 
-		public override ICompletionDataList CodeCompletionCommand(CodeCompletionContext completionContext)
-		{
-			var a = 0;
-			return HandleCodeCompletion(completionContext, '-', ref a);
-		}
-
 		public override ICompletionDataList HandleCodeCompletion(CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
 		{
 			var completionDataList = new CompletionDataList();
