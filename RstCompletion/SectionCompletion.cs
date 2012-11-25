@@ -35,6 +35,11 @@ namespace MonoDevelop.Rst
 			{
 				return;
 			}
+			var currentLine = document.Editor.GetLineText(lineNumber);
+			if(!string.IsNullOrEmpty(currentLine) && !currentLine.All(x => x == completionChar))
+			{
+				return;
+			}
 			var charsToCompleteNo = lineAbove.Length - completionContext.TriggerLineOffset;
 			if(charsToCompleteNo <= 0)
 			{
