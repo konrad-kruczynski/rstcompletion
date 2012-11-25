@@ -36,7 +36,7 @@ namespace MonoDevelop.Rst
 	{
 		public override void Initialize()
 		{
-			sectionCompletion = new SectionCompletion(Document);
+			sectionCompletion = new Section(Document);
 			base.Initialize();
 		}
 
@@ -67,7 +67,7 @@ namespace MonoDevelop.Rst
 			return true;
 		}
 
-		private SectionCompletion sectionCompletion;
+		private Section sectionCompletion;
 	}
 }
 

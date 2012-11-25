@@ -8,9 +8,9 @@ using System.IO;
 
 namespace MonoDevelop.Rst
 {
-	public sealed class SectionCompletion
+	public sealed class Section
 	{
-		public SectionCompletion(Document document)
+		public Section(Document document)
 		{
 			linesWithSections = new Dictionary<int, char>();
 			this.document = document;
