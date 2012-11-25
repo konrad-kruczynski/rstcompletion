@@ -42,7 +42,7 @@ namespace MonoDevelop.Rst
 			}
 			var completionData = new CompletionData(new string(completionChar, charsToCompleteNo))
 			{
-				Description = string.Format("Section mark ({0} chars)", charsToCompleteNo)
+				Description = "Title/subtitle"
 			};
 			completionList.Add(completionData);
 
@@ -131,7 +131,7 @@ namespace MonoDevelop.Rst
 
 		private readonly Document document;
 
-		private static readonly char[] SectionChars = new [] { '-' };
+		private static readonly char[] SectionChars = new [] { '-', '=', '_', '~', '*' };
 	}
 }
 
