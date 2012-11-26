@@ -17,10 +17,13 @@ namespace MonoDevelop.Rst
 			char bulletChar;
 			if(key == Key.Return && IsInBulletMode(document.Editor.Caret.Line, out indentLength, out bulletChar))
 			{
-				document.Editor.Insert(document.Editor.Caret.Offset, keyChar.ToString());
-				var bulletLine = new string(' ', indentLength) + bulletChar + ' ';
+				// I'm not sure why the last space is eaten here
+				var bulletLine = new string(' ', indentLength) + bulletChar + "  ";
+				// + 1 since we put it at the next line
 				document.Editor.Insert(document.Editor.Caret.Offset + 1, bulletLine);
-				document.Editor.Caret.Offset += (bulletLine.Length + 1);
+				document.Editor.Caret.Offset += bulletLine.Length;
+				document.Editor.Insert(document.Editor.Caret.Offset, document.Editor.EolMarker);
+				document.Editor.Caret.Offset--;
 				return false;
 			}
 			return true;
