@@ -29,6 +29,7 @@ using MonoDevelop.Ide.Gui.Content;
 using MonoDevelop.Ide.Gui;
 using System.IO;
 using MonoDevelop.Ide.CodeCompletion;
+using Gdk;
 
 namespace MonoDevelop.Rst
 {
@@ -37,6 +38,7 @@ namespace MonoDevelop.Rst
 		public override void Initialize()
 		{
 			sectionCompletion = new Section(Document);
+			bullet = new Bullet(Document);
 			base.Initialize();
 		}
 
@@ -49,6 +51,11 @@ namespace MonoDevelop.Rst
 		{
 			sectionCompletion.TextChanged(startIndex, endIndex);
 			base.TextChanged(startIndex, endIndex);
+		}
+
+		public override bool KeyPress(Key key, char keyChar, ModifierType modifier)
+		{
+			return bullet.KeyPress(key, keyChar, modifier);
 		}
 
 		public override ICompletionDataList HandleCodeCompletion(CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
@@ -68,6 +75,7 @@ namespace MonoDevelop.Rst
 		}
 
 		private Section sectionCompletion;
+		private Bullet bullet;
 	}
 }
 
