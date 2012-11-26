@@ -2,7 +2,7 @@
 	name="RST code completion"
 	author="Konrad Kruczyński"
 	description="RST code completion plugin for MonoDevelop"
-	version="0.1"
+	version="0.1.1"
 >
 
 <Dependencies>

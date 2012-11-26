@@ -6,5 +6,5 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("Konrad Kruczyński")]
 [assembly: AssemblyCopyright("Copyright 2012 Konrad Kruczyński")]
 
-[assembly: AssemblyVersion("0.1")]
+[assembly: AssemblyVersion("0.1.1")]
 
