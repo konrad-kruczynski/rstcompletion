@@ -55,7 +55,8 @@ namespace MonoDevelop.Rst
 
 		public override bool KeyPress(Key key, char keyChar, ModifierType modifier)
 		{
-			return bullet.KeyPress(key, keyChar, modifier);
+			return bullet.KeyPress(key, keyChar, modifier)
+				&& base.KeyPress(key, keyChar, modifier);
 		}
 
 		public override ICompletionDataList HandleCodeCompletion(CodeCompletionContext completionContext, char completionChar, ref int triggerWordLength)
