@@ -40,32 +40,45 @@ namespace MonoDevelop.Rst
 		{
 			int indentLength;
 			char bulletChar;
-			if(key == Key.Return && IsInBulletMode(document.Editor.Caret.Line, out indentLength, out bulletChar))
+			if(key == Key.Return)
 			{
-				// I'm not sure why the last space is eaten here
-				var bulletLine = new string(' ', indentLength) + bulletChar + "  ";
-				// + 1 since we put it at the next line
-				document.Editor.Insert(document.Editor.Caret.Offset + 1, bulletLine);
-				document.Editor.Caret.Offset += bulletLine.Length;
-				document.Editor.Insert(document.Editor.Caret.Offset, document.Editor.EolMarker);
-				document.Editor.Caret.Offset--;
-				return false;
+				var bulletState = GetBulletState(document.Editor.Caret.Line, out indentLength, out bulletChar);
+				if(bulletState == BulletState.None)
+				{
+					return true;
+				}
+				if(bulletState == BulletState.InBullet)
+				{
+					// I'm not sure why the last space is eaten here
+					var bulletLine = new string(' ', indentLength) + bulletChar + "  ";
+					// + 1 since we put it at the next line
+					document.Editor.Insert(document.Editor.Caret.Offset + 1, bulletLine);
+					document.Editor.Caret.Offset += bulletLine.Length;
+					document.Editor.Insert(document.Editor.Caret.Offset, document.Editor.EolMarker);
+					document.Editor.Caret.Offset--;
+					return false;
+				}
+				// time to finish the bullet
+				var currentLine = document.Editor.GetLine(document.Editor.Caret.Line);
+				document.Editor.Remove(currentLine.Offset, currentLine.Length);
+				return true;
 			}
 			return true;
 		}
 
-		private bool IsInBulletMode(int lineNumber, out int indentLength, out char bulletChar)
+		private BulletState GetBulletState(int lineNumber, out int indentLength, out char bulletChar)
 		{
 			indentLength = 0;
 			bulletChar = default(char);
 			var currentLine = document.Editor.GetLineText(lineNumber);
 			if(string.IsNullOrWhiteSpace(currentLine))
 			{
-				return false;
+				return BulletState.None;
 			}
-			if(!CanBeBulletLine(currentLine, out bulletChar, out indentLength))
+			var bulletState = GetBulletStateForLine(currentLine, out bulletChar, out indentLength);
+			if(bulletState == BulletState.None)
 			{
-				return false;
+				return BulletState.None;
 			}
 			// scan the previous line until blank line or rule breaking is found
 			while(lineNumber > 0)
@@ -78,46 +91,58 @@ namespace MonoDevelop.Rst
 				}
 				char currentBulletChar;
 				int currentIndentLength;
-				var isBullet = CanBeBulletLine(line, out currentBulletChar, out currentIndentLength);
-				if(!isBullet)
+				var isBullet = GetBulletStateForLine(line, out currentBulletChar, out currentIndentLength);
+				if(isBullet == BulletState.None)
 				{
-					return false;
+					return BulletState.None;
 				}
 				if(currentBulletChar != bulletChar)
 				{
-					return true;
+					return bulletState;
 				}
 				if(currentIndentLength != indentLength)
 				{
-					return true;
+					return bulletState;
 				}
 			}
 			// we've reached the start of the document
-			return true;
+			return bulletState;
 		}
 
-		private bool CanBeBulletLine(string line, out char bulletChar, out int indentLength)
+		private BulletState GetBulletStateForLine(string line, out char bulletChar, out int indentLength)
 		{
 			bulletChar = default(char);
 			indentLength = 0;
 			var trimmedLine = line.TrimStart();
-			if(trimmedLine.Length < 3)
+			if(trimmedLine.Length < 1)
 			{
-				return false;
+				return BulletState.None;
 			}
 			var bulletCharIndex = Array.IndexOf(BulletChars, trimmedLine[0]);
-			if(bulletCharIndex == -1 || trimmedLine[1] != ' ' || char.IsWhiteSpace(trimmedLine[2]))
+			if(bulletCharIndex == -1)
 			{
-				return false;
+				return BulletState.None;
+			}
+			if(trimmedLine.TrimEnd().Length < 2)
+			{
+				// only the bullet sign + whitespaces
+				return BulletState.Finishing;
 			}
 			indentLength = line.Length - trimmedLine.Length;
 			bulletChar = BulletChars[bulletCharIndex];
-			return true;
+			return BulletState.InBullet;
 		}
 
 		private readonly Document document;
 
 		private static readonly char[] BulletChars = new [] { '+', '*', '-' };
+
+		private enum BulletState
+		{
+			None,
+			InBullet,
+			Finishing
+		}
 	}
 }
 

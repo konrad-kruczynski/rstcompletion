@@ -11,7 +11,7 @@ Features
 
 * Completion on titles/subtitles. For example write *Blah*, press **ENTER**, then write `-`, completion will be proposed.
 * Auto-adjusting title/subtitle underline. Just edit formerly completed *Blah*.
-* Bullet list edition help. When you create the first bullet list entry, pressing **ENTER** will move you to the new, auto-inserted entry. Also works with multi-level bullet lists and keeps the proper indent.
+* Bullet list edition help. When you create the first bullet list entry, pressing **ENTER** will move you to the new, auto-inserted entry. Also works with multi-level bullet lists and keeps the proper indent. Also when you hit double **ENTER**, the bullet list will be smartly finished.
 
 Need a feature, found a bug?
 ----------------------------
