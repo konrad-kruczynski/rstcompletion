@@ -53,6 +53,7 @@
     <Compile Include="RstCompletionExtension.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="Bullet.cs" />
+    <Compile Include="Directives.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -39,6 +39,7 @@ namespace MonoDevelop.Rst
 		{
 			sectionCompletion = new Section(Document);
 			bullet = new Bullet(Document);
+			directives = new Directives(Document);
 			base.Initialize();
 		}
 
@@ -63,6 +64,7 @@ namespace MonoDevelop.Rst
 		{
 			var completionDataList = new CompletionDataList();
 			sectionCompletion.FillCompletionList(completionDataList, completionContext, completionChar, ref triggerWordLength);
+			directives.FillCompletionList(completionDataList, completionContext, completionChar, ref triggerWordLength);
 			if(completionDataList.Count == 0)
 			{
 				return null;
@@ -75,6 +77,7 @@ namespace MonoDevelop.Rst
 			return true;
 		}
 
+		private Directives directives;
 		private Section sectionCompletion;
 		private Bullet bullet;
 	}
